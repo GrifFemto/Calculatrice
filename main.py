@@ -50,7 +50,10 @@ def traite_touche_operation(operation):
         if ope_courante == "Egal":
             resultat = nombre_courant
         else:
-            execute_operation(ope_courante)
+            try:
+                execute_operation(ope_courante)
+            except ValueError:
+                resultat = nombre_courant
     if not nombre_courant:
         nombre_courant = _get_nombre_from_pile()
     ope_courante = operation
