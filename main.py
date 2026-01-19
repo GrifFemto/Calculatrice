@@ -9,11 +9,16 @@ ope_courante = False
 
 
 def touche_appuyee(touche):
+    global nombre_courant,nombre2,ope_courante
     if touche in ["0","1","2","3","4","5","6","7","8","9","."]:
         traite_touche_chiffre(touche)
     elif touche in ["Plus","Moins","Fois","Diviser","Egal"]:
         traite_touche_operation(touche)
     elif touche == "Reset":
+        nombre_courant = False
+        ope_courante = False
+        nombre2 = 0
+        resultat = 0
         pile_ecran.clear()
         update_screen()
 
@@ -55,15 +60,21 @@ def traite_touche_operation(operation):
             except ValueError:
                 resultat = nombre_courant
     if not nombre_courant:
-        nombre_courant = _get_nombre_from_pile()
+        try:
+            nombre_courant = _get_nombre_from_pile()
+        except ValueError:
+            nombre_courant = 0
     ope_courante = operation
     pile_ecran.clear()
 
 def execute_operation(operation):
-    global nombre_courant
+    global nombre_courant,nombre2,resultat
     if operation:
         nombre2 = _get_nombre_from_pile()
         resultat = 0
+        #print("Nombre courant après changement: ",nombre_courant)
+        #print("Nombre2 après changement: ",nombre2)
+        ##print("Resultat après changement: ",resultat) 
         if operation == "Plus":
             resultat = nombre_courant + nombre2
         elif operation == "Moins":
@@ -73,6 +84,10 @@ def execute_operation(operation):
         elif operation == "Diviser":
             resultat = nombre_courant / nombre2
         nombre_courant = resultat
+        #print("Nombre courant après calcul: ",nombre_courant)
+        #print("Nombre2 après calcul: ",nombre2)
+        #print("Resultat après calcul: ",resultat)
+        #print("")
         pile_ecran.clear()
         update_screen(str(resultat))
 
@@ -84,7 +99,7 @@ def execute_operation(operation):
 
 app = customtkinter.CTk()
 app.title('Caclulatrice 1.0')
-app.geometry("380x600")
+app.geometry("1000x600")
 
 screen_font = ("Courrier",55,'bold')
 screen = customtkinter.CTkLabel(app,text="0",font=screen_font)
